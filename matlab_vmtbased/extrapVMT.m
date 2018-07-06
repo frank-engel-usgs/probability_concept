@@ -1,4 +1,12 @@
-function [exponent,alpha] = extrapVMT(udim,zdim,range,fitcombo)
+function [extrap,fig_extrap_handle] = extrapVMT(udim,zdim,range,fitcombo)
+
+% See if Extrap plot exists already, if so clear the figure
+fig_extrap_handle = findobj(0,'name','Velocity Profile Extrapotation');
+if ~isempty(fig_extrap_handle) &&  ishandle(fig_extrap_handle)
+    figure(fig_extrap_handle); clf
+else
+    fig_extrap_handle = figure('name','Velocity Profile Extrapotation'); clf
+end
 
 method = 'optimize';  % Use extrap to determine best fit
 % fitcombo='ConstantNo Slip';
@@ -16,15 +24,23 @@ zbin = discretize(z,zedges);
 [~,~,zix] = unique(zbin) ;
 avgz = accumarray(zix,z,[],@nanmean) ;
 y    = accumarray(zix,u,[],@nanmean) ;
+unit25 = accumarray(zix,u,[],@(x) prctile(x,25)) ;
+unit75 = accumarray(zix,u,[],@(x) prctile(x,75)) ;
+unitmed = accumarray(zix,u,[],@nanmedian) ;
 
 [avgz,ind]=sort(avgz,'descend');
-y=y(ind);
+y=y(ind); unit25=unit25(ind); unit75=unit75(ind); unitmed=unitmed(ind);
 idxz = find(~isnan(avgz));
-% Start a figure, showing the average of the dimesionless profile
 
-figure(10);clf
+% Start a figure, showing the average of the dimesionless profile
+figure(fig_extrap_handle);clf
 plot(udim(:,:),zdim(:,:),'.','color', [0.8 0.8 0.8]); hold on
-plot(y(idxz),avgz(idxz),'ks')
+% Plot innerquartile range bars around median values that meet criteria
+for k=1:length(idxz)
+    plot([unit25(idxz(k)) unit75(idxz(k))],[avgz(idxz(k)) avgz(idxz(k))],'-k','LineWidth',2)
+end
+plot(y(idxz),avgz(idxz),'sk','MarkerFaceColor','k')
+
 
 % Initialize fit boundaries
 lowerbnd=[-Inf 0.01];
@@ -46,6 +62,7 @@ switch fitcombo
         zc=max(avgz(idxz))+0.01:0.01:1;
         zc=zc';
         uc=repmat(y(idxz(1)),size(zc));
+        idxpower = idxz;
         
     case ('3-PointPower')
         obj.z=0:0.01:max(avgz(idxz));
@@ -62,7 +79,7 @@ switch fitcombo
             uc=zc.*p(1)+p(2);
         end % if nbins
         
-    case ('ConstantNo Slip')
+    case ('ConstantNoSlip')
         
         % Optimize Constant / No Slip if sufficient cells
         % are available.
@@ -92,7 +109,7 @@ switch fitcombo
         zc=zc';
         uc=repmat(y(idxz(1)),size(zc));
         
-    case '3-PointNo Slip'
+    case '3-PointNoSlip'
         
         % Optimize Constant / No Slip if sufficient cells
         % are available.
@@ -219,16 +236,15 @@ end % if zc
 % obj.expMethod=method;
 % obj.dataType=normData.dataType;
 %%
-figure(10); hold on
+figure(fig_extrap_handle); hold on
 plot(obj.u,obj.z,'k-','linewidth',2)
 title (...
     {'Normalized Extrap'})
 xlabel('Velocity(z)/Avg Velocity')
 ylabel('Depth(z)/Vertical Beam Depth')
 
-disp(['Exponent: ' num2str(obj.exponent)])
+%disp(['Exponent: ' num2str(obj.exponent)])
 
 k = 1/(obj.exponent + 1);
-exponent = obj.exponent;
-alpha = k;
-disp(['Alpha (k-index): ' num2str(k)])
+obj.k = k;
+extrap = obj;

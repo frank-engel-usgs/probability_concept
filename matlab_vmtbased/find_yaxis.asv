@@ -85,8 +85,22 @@ zdim = zdim(:,sample_mask(1,:));
 udim = udim(:,sample_mask(1,:));
 
 
-% Compute all the extrap fits
-[extrapCP,fig_extrap_handle] = extrapVMT(udim,zdim,1:size(u,1),'ConstantPower');
-[extrapCNS,fig_extrap_handle] = extrapVMT(udim,zdim,1:size(u,1),'ConstantNoSlip');
-[extrap3pNS,fig_extrap_handle] = extrapVMT(udim,zdim,1:size(u,1),'3-PointNoSlip');
-[extrapPP,fig_extrap_handle] = extrapVMT(udim,zdim,1:size(u,1),'PowerPower');
+
+[exponentPP,alphaPP,extrapPP] = extrapVMT(udim,zdim,1:size(u,1),'PowerPower');
+[exponentCP,alphaCP,extrapCP] = extrapVMT(udim,zdim,1:size(u,1),'ConstantPower');
+[exponentCNS,alphaCNS,extrapCNS] = extrapVMT(udim,zdim,1:size(u,1),'ConstantNoSlip');
+[exponent3pNS,alpha2pNS,extrap3pNS] = extrapVMT(udim,zdim,1:size(u,1),'3-PointNoSlip');
+
+% See if Extrap plot exists already, if so clear the figure
+fig_extrap_handle = findobj(0,'name','Velocity Profile Extrapotation');
+if ~isempty(fig_extrap_handle) &&  ishandle(fig_extrap_handle)
+    figure(fig_extrap_handle); clf
+else
+    fig_extrap_handle = figure('name','Velocity Profile Extrapotation'); clf
+end
+figure(fig_extrap_handle); hold on
+plot(extrapPP.u,extrapPP.z,'k-','linewidth',2)
+title (...
+    {'Normalized Extrap'})
+xlabel('Velocity(z)/Avg Velocity')
+ylabel('Depth(z)/Vertical Beam Depth')
