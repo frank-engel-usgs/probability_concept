@@ -4,11 +4,18 @@ method = 'optimize';  % Use extrap to determine best fit
 % fitcombo='ConstantNo Slip';
 % fitcombo='PowerPower';
 
-edges = 0.1:0.1:1;
-Y = discretize(zdim,edges)
+% edges = 0.1:0.1:1;
+% bin = discretize(zdim,edges);
+% [BinValue,~,ix] = unique(bin) ;
+% avgz = accumarray(ix,zdim,@mean) ;
+% Result = [BinValue avgz]
 
-avgz = nanmean(zdim(range,:),1);
-y    = nanmean(udim(range,:),1);
+zedges = 0.1:0.1:1;
+z = zdim(:); u = udim(:);
+zbin = discretize(z,zedges);
+[~,~,zix] = unique(zbin) ;
+avgz = accumarray(zix,z,[],@nanmean) ;
+y    = accumarray(zix,u,[],@nanmean) ;
 
 [avgz,ind]=sort(avgz,'descend');
 y=y(ind);

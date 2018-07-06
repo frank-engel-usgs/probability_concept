@@ -48,7 +48,7 @@ V = VMT_SmoothVar(V, ...
 [row,col] = ind2sub(size(V.uSmooth),ind);
 figure(fig_contour_handle)
 hold on
-plot(V.mcsDist(row,col),V.mcsDepth(row,col),'kx','MarkerSize',10)
+scatter(V.mcsDist(row,col),V.mcsDepth(row,col),'kx','Linewidth',2)
 VMTStylePrint()
 
 % The issue is: if the max is found at the surface-most value, then do we

@@ -10,8 +10,12 @@ method = 'optimize';  % Use extrap to determine best fit
 % avgz = accumarray(ix,zdim,@mean) ;
 % Result = [BinValue avgz]
 
-avgz = nanmean(zdim(range,:),1);
-y    = nanmean(udim(range,:),1);
+zedges = 0.1:0.1:1;
+z = zdim(:); u = udim(:);
+zbin = discretize(z,zedges);
+[~,~,zix] = unique(zbin) ;
+avgz = accumarray(zix,z,[],@nanmean) ;
+y    = accumarray(zix,u,[],@nanmean) ;
 
 [avgz,ind]=sort(avgz,'descend');
 y=y(ind);
@@ -168,7 +172,7 @@ end % switch method
 
 % Fit data
 if length(ok_)>1
-    [cf, gof, ~] = fit(zfit(ok_)',yfit(ok_)',ft_,fo_);
+    [cf, gof, ~] = fit(zfit(ok_),yfit(ok_),ft_,fo_);
     
     % Extract exponent and confidence intervals from fit
     if strcmpi(method,'optimize')
