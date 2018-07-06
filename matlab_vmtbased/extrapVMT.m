@@ -1,4 +1,4 @@
-function [extrap,fig_extrap_handle] = extrapVMT(udim,zdim,range,fitcombo)
+function [extrap,fig_extrap_handle] = extrapVMT(udim,zdim,range,fitcombo,method)
 
 % See if Extrap plot exists already, if so clear the figure
 fig_extrap_handle = findobj(0,'name','Velocity Profile Extrapotation');
@@ -8,7 +8,6 @@ else
     fig_extrap_handle = figure('name','Velocity Profile Extrapotation'); clf
 end
 
-method = 'optimize';  % Use extrap to determine best fit
 % fitcombo='ConstantNo Slip';
 % fitcombo='PowerPower';
 
@@ -40,6 +39,8 @@ for k=1:length(idxz)
     plot([unit25(idxz(k)) unit75(idxz(k))],[avgz(idxz(k)) avgz(idxz(k))],'-k','LineWidth',2)
 end
 plot(y(idxz),avgz(idxz),'sk','MarkerFaceColor','k')
+obj.umedian = y(idxz);
+obj.zmedian = avgz(idxz);
 
 
 % Initialize fit boundaries

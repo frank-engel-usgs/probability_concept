@@ -58,7 +58,7 @@ VMTStylePrint()
 % produce an extrap on it. Let's see what that yields...
 
 % Subsample velocities by 1 stdev of channel width, centered on umax column
-% (i.e., 34.1% either side) 
+% (i.e., 34.1% either side)
 sigmas = 0.341;
 width = nanmax(V.mcsDist(:));
 yaxis_dist = V.mcsDist(1,col);
@@ -73,34 +73,163 @@ sample_mask = V.mcsDist >= min_dist &...
 u = V.uSmooth; z = V.mcsDepth;
 zdim = nan(size(u)); udim = nan(size(u));
 for i = 1:size(u,2)
-    H = V.mcsBed(i);
-    U = VMT_LayerAveMean(z(:,i),u(:,i));
-    zdim(:,i) = (H - z(:,i))./H;
-    udim(:,i) = u(:,i)./U;
+    H(i) = V.mcsBed(i);
+    U(i) = VMT_LayerAveMean(z(:,i),u(:,i));
+    zdim(:,i) = (H(i) - z(:,i))./H(i);
+    udim(:,i) = u(:,i)./U(i);
 end
 zdim(zdim<=0) = nan;
 zdim(~sample_mask) = nan; udim(~sample_mask) = nan;
 zdim(isnan(udim)) = nan;
 zdim = zdim(:,sample_mask(1,:));
 udim = udim(:,sample_mask(1,:));
+H = H(:,sample_mask(1,:));
+U = U(:,sample_mask(1,:));
 
 
+% Compute all the extrap fits
+[extrapPP,~] = extrapVMT(udim,zdim,1:size(u,1),'PowerPower','default');
+[extrapCP,~] = extrapVMT(udim,zdim,1:size(u,1),'ConstantPower','default');
+[extrapCPopt,~] = extrapVMT(udim,zdim,1:size(u,1),'ConstantPower','optimize');
+[extrapCNS,~] = extrapVMT(udim,zdim,1:size(u,1),'ConstantNoSlip','default');
+[extrapCNSopt,~] = extrapVMT(udim,zdim,1:size(u,1),'ConstantNoSlip','optimize');
+[extrap3pNS,~] = extrapVMT(udim,zdim,1:size(u,1),'3-PointNoSlip','default');
+[extrap3pNSopt,~] = extrapVMT(udim,zdim,1:size(u,1),'3-PointNoSlip','optimize');
+[extrapPPopt,fig_extrap_handle] = extrapVMT(udim,zdim,1:size(u,1),'PowerPower','optimize');
 
-[exponentPP,alphaPP,extrapPP] = extrapVMT(udim,zdim,1:size(u,1),'PowerPower');
-[exponentCP,alphaCP,extrapCP] = extrapVMT(udim,zdim,1:size(u,1),'ConstantPower');
-[exponentCNS,alphaCNS,extrapCNS] = extrapVMT(udim,zdim,1:size(u,1),'ConstantNoSlip');
-[exponent3pNS,alpha2pNS,extrap3pNS] = extrapVMT(udim,zdim,1:size(u,1),'3-PointNoSlip');
+% Find total mean velocity using trapz (from VMT method) for each profile
+% type. As this represents the y-axis, use H at this location for
+% dimensioning
+uPP = abs(VMT_LayerAveMean(extrapPP.z.*mean(H),extrapPP.u.*mean(U)));
+uPPopt = abs(VMT_LayerAveMean(extrapPPopt.z.*mean(H),extrapPPopt.u.*mean(U)));
 
-% See if Extrap plot exists already, if so clear the figure
-fig_extrap_handle = findobj(0,'name','Velocity Profile Extrapotation');
-if ~isempty(fig_extrap_handle) &&  ishandle(fig_extrap_handle)
-    figure(fig_extrap_handle); clf
+% CPower
+botZ = extrapCP.z(extrapCP.z<=0.25).*mean(H);
+botU = extrapCP.u(extrapCP.z<=0.25).*mean(U);
+midZ = extrapCP.zmedian.*mean(H);
+midU = extrapCP.umedian.*mean(U);
+topZ = extrapCP.z(extrapCP.z>=0.5).*mean(H);
+topU = extrapCP.u(extrapCP.z>=0.5).*mean(U);
+toZ = [botZ; midZ; topZ];
+toU = [botU; midU; topU];
+[toZ,ind]=sort(toZ,'descend');
+toU=toU(ind);
+uCP = abs(VMT_LayerAveMean(toZ,toU));
+
+% CPower Optimized
+botZ = extrapCPopt.z(extrapCPopt.z<=0.25).*mean(H);
+botU = extrapCPopt.u(extrapCPopt.z<=0.25).*mean(U);
+midZ = extrapCPopt.zmedian.*mean(H);
+midU = extrapCPopt.umedian.*mean(U);
+topZ = extrapCPopt.z(extrapCPopt.z>=0.5).*mean(H);
+topU = extrapCPopt.u(extrapCPopt.z>=0.5).*mean(U);
+toZ = [botZ; midZ; topZ];
+toU = [botU; midU; topU];
+[toZ,ind]=sort(toZ,'descend');
+toU=toU(ind);
+uCPopt = abs(VMT_LayerAveMean(toZ,toU));
+
+% CNS
+botZ = extrapCNS.z(extrapCNS.z<=0.25).*mean(H);
+botU = extrapCNS.u(extrapCNS.z<=0.25).*mean(U);
+midZ = extrapCNS.zmedian.*mean(H);
+midU = extrapCNS.umedian.*mean(U);
+topZ = extrapCNS.z(extrapCNS.z>=0.5).*mean(H);
+topU = extrapCNS.u(extrapCNS.z>=0.5).*mean(U);
+toZ = [botZ; midZ; topZ];
+toU = [botU; midU; topU];
+[toZ,ind]=sort(toZ,'descend');
+toU=toU(ind);
+uCNS = abs(VMT_LayerAveMean(toZ,toU));
+
+% CNS optimized
+botZ = extrapCNSopt.z(extrapCNSopt.z<=0.25).*mean(H);
+botU = extrapCNSopt.u(extrapCNSopt.z<=0.25).*mean(U);
+midZ = extrapCNSopt.zmedian.*mean(H);
+midU = extrapCNSopt.umedian.*mean(U);
+topZ = extrapCNSopt.z(extrapCNSopt.z>=0.5).*mean(H);
+topU = extrapCNSopt.u(extrapCNSopt.z>=0.5).*mean(U);
+toZ = [botZ; midZ; topZ];
+toU = [botU; midU; topU];
+[toZ,ind]=sort(toZ,'descend');
+toU=toU(ind);
+uCNSopt = abs(VMT_LayerAveMean(toZ,toU));
+
+% 3-point No Slip
+botZ = extrap3pNS.z(extrap3pNS.z<=0.25).*mean(H);
+botU = extrap3pNS.u(extrap3pNS.z<=0.25).*mean(U);
+midZ = extrap3pNS.zmedian.*mean(H);
+midU = extrap3pNS.umedian.*mean(U);
+topZ = extrap3pNS.z(extrap3pNS.z>=0.5).*mean(H);
+topU = extrap3pNS.u(extrap3pNS.z>=0.5).*mean(U);
+toZ = [botZ; midZ; topZ];
+toU = [botU; midU; topU];
+[toZ,ind]=sort(toZ,'descend');
+toU=toU(ind);
+u3PNS = abs(VMT_LayerAveMean(toZ,toU));
+
+% 3-point No Slip Optimized
+botZ = extrap3pNSopt.z(extrap3pNSopt.z<=0.25).*mean(H);
+botU = extrap3pNSopt.u(extrap3pNSopt.z<=0.25).*mean(U);
+midZ = extrap3pNSopt.zmedian.*mean(H);
+midU = extrap3pNSopt.umedian.*mean(U);
+topZ = extrap3pNSopt.z(extrap3pNSopt.z>=0.5).*mean(H);
+topU = extrap3pNSopt.u(extrap3pNSopt.z>=0.5).*mean(U);
+toZ = [botZ; midZ; topZ];
+toU = [botU; midU; topU];
+[toZ,ind]=sort(toZ,'descend');
+toU=toU(ind);
+u3PNSopt = abs(VMT_LayerAveMean(toZ,toU));
+
+% Determine all of the percent differences based on the
+% reference mean
+referenceMean = uPP;
+uPPperdiff = ((uPP-referenceMean)./referenceMean).*100;
+uPPoptperdiff = ((uPPopt-referenceMean)./referenceMean).*100;
+uCNSperdiff = ((uCNS-referenceMean)./referenceMean).*100;
+uCNSoptperdiff = ((uCNSopt-referenceMean)./referenceMean).*100;
+u3PNSperdiff = ((u3PNS-referenceMean)./referenceMean).*100;
+u3PNSoptperdiff = ((u3PNSopt-referenceMean)./referenceMean).*100;
+
+% Create a uitable with values
+% See if Table figure exists already, if so clear the figure
+fig_table_handle = findobj(0,'name','Extrapolation Sensitivity Table');
+if ~isempty(fig_table_handle) &&  ishandle(fig_table_handle)
+    figure(fig_table_handle); clf
+    fPos = get(fig_table_handle,'Position'); fPos(3:4) = [352 148];
+    fig_table_handle.Position = fPos;
 else
-    fig_extrap_handle = figure('name','Velocity Profile Extrapotation'); clf
+    fig_table_handle = figure('name','Extrapolation Sensitivity Table'); clf
+    fPos = get(fig_table_handle,'Position'); fPos(3:4) = [352 148];
+    fig_table_handle.Position = fPos;
 end
-figure(fig_extrap_handle); hold on
-plot(extrapPP.u,extrapPP.z,'k-','linewidth',2)
-title (...
-    {'Normalized Extrap'})
-xlabel('Velocity(z)/Avg Velocity')
-ylabel('Depth(z)/Vertical Beam Depth')
+uTable(1,1)={'Power'};
+uTable(1,2)={'Power'};
+uTable(1,3)={'0.1667'};
+uTable(1,4)={num2str(uPPperdiff,'%6.2f')};
+uTable(2,1)={'Power'};
+uTable(2,2)={'Power'};
+uTable(2,3)={num2str(extrapPPopt.exponent,'%6.4f')};
+uTable(2,4)={num2str(uPPoptperdiff,'%6.2f')};
+uTable(3,1)={'Constant'};
+uTable(3,2)={'No Slip'};
+uTable(3,3)={'0.1667'};
+uTable(3,4)={num2str(uCNSperdiff,'%6.2f')};
+uTable(4,1)={'Constant'};
+uTable(4,2)={'No Slip'};
+uTable(4,3)={num2str(extrapCNSopt.exponent,'%6.4f')};
+uTable(4,4)={num2str(uCNSoptperdiff,'%6.2f')};
+uTable(5,1)={'3-Point'};
+uTable(5,2)={'No Slip'};
+uTable(5,3)={'0.1667'};
+uTable(5,4)={num2str(u3PNSperdiff,'%6.2f')};
+uTable(6,1)={'3-Point'};
+uTable(6,2)={'No Slip'};
+uTable(6,3)={num2str(extrap3pNSopt.exponent,'%6.4f')};
+uTable(6,4)={num2str(u3PNSoptperdiff,'%6.2f')};
+t = uitable(fig_table_handle);
+t.Data = uTable;
+t.ColumnName = {'Top Fit','Bottom Fit','Exponent','% Difference'};
+t.Position = [8 8 335 132];
+
+% Finally, compute k f
