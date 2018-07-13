@@ -1,23 +1,7 @@
-function [extrap,fig_extrap_handle] = extrapVMT(udim,zdim,range,fitcombo,method)
+function [extrap] = extrapVMT(udim,zdim,range,fitcombo,method,varargin)
 
-% See if Extrap plot exists already, if so clear the figure
-fig_extrap_handle = findobj(0,'name','Velocity Profile Extrapotation');
-if ~isempty(fig_extrap_handle) &&  ishandle(fig_extrap_handle)
-    figure(fig_extrap_handle); clf
-else
-    fig_extrap_handle = figure('name','Velocity Profile Extrapotation'); clf
-end
 
-% fitcombo='ConstantNo Slip';
-% fitcombo='PowerPower';
-
-% edges = 0.1:0.1:1;
-% bin = discretize(zdim,edges);
-% [BinValue,~,ix] = unique(bin) ;
-% avgz = accumarray(ix,zdim,@mean) ;
-% Result = [BinValue avgz]
-
-zedges = 0.1:0.1:1;
+zedges = 0.1:0.05:1;
 z = zdim(:); u = udim(:);
 zbin = discretize(z,zedges);
 [~,~,zix] = unique(zbin) ;
@@ -31,16 +15,10 @@ unitmed = accumarray(zix,u,[],@nanmedian) ;
 y=y(ind); unit25=unit25(ind); unit75=unit75(ind); unitmed=unitmed(ind);
 idxz = find(~isnan(avgz));
 
-% Start a figure, showing the average of the dimesionless profile
-figure(fig_extrap_handle);clf
-plot(udim(:,:),zdim(:,:),'.','color', [0.8 0.8 0.8]); hold on
-% Plot innerquartile range bars around median values that meet criteria
-for k=1:length(idxz)
-    plot([unit25(idxz(k)) unit75(idxz(k))],[avgz(idxz(k)) avgz(idxz(k))],'-k','LineWidth',2)
-end
-plot(y(idxz),avgz(idxz),'sk','MarkerFaceColor','k')
 obj.umedian = y(idxz);
 obj.zmedian = avgz(idxz);
+obj.unit25 = unit25;
+obj.unit75 = unit75;
 
 
 % Initialize fit boundaries
@@ -48,7 +26,7 @@ lowerbnd=[-Inf 0.01];
 upperbnd=[Inf   1];
 
 
-% If less than 4 cells, use default P/P 1/6, otherwise optimize the fit
+% If less than 6 cells, use default P/P 1/6, otherwise optimize the fit
 
 switch fitcombo
     case ('PowerPower')
@@ -80,7 +58,7 @@ switch fitcombo
             uc=zc.*p(1)+p(2);
         end % if nbins
         
-    case ('ConstantNoSlip')
+    case ('ConstantNo Slip')
         
         % Optimize Constant / No Slip if sufficient cells
         % are available.
@@ -215,6 +193,10 @@ if length(ok_)>1
     end % if confint
 end % if ok_
 
+% Compute alpha (k) based on the exponent from the power law approximation
+k = 1/(obj.exponent + 1);
+obj.k = k;
+
 % Fit power curve to appropriate data
 obj.coef=((obj.exponent+1).*0.05.*nansum(y(idxpower)))./...
     nansum(((avgz(idxpower)+0.5.*0.05).^(obj.exponent+1))-((avgz(idxpower)-0.5.*0.05).^(obj.exponent+1)));
@@ -229,23 +211,7 @@ if ~isnan(zc)
     obj.u=[obj.u ; uc];
     obj.z=[obj.z ; zc];
 end % if zc
+obj.validData = idxz;
 
-% Assign variables to object properties
-% obj.fileName=normData.fileName;
-% obj.topMethod=top;
-% obj.botMethod=bot;
-% obj.expMethod=method;
-% obj.dataType=normData.dataType;
-%%
-figure(fig_extrap_handle); hold on
-plot(obj.u,obj.z,'k-','linewidth',2)
-title (...
-    {'Normalized Extrap'})
-xlabel('Velocity(z)/Avg Velocity')
-ylabel('Depth(z)/Vertical Beam Depth')
 
-%disp(['Exponent: ' num2str(obj.exponent)])
-
-k = 1/(obj.exponent + 1);
-obj.k = k;
 extrap = obj;

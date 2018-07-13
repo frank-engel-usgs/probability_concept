@@ -1,0 +1,176 @@
+function [obj] = selectFit(obj,ppobj,nsobj)
+% Begin automatic fit
+
+n=1;
+validData = 1:length(obj(n).zmedian);
+% More the 6 cells are required to compute an optimized fit. For
+% fewer than 7 cells the default power/power fit is selected due to
+% lack of sufficient data for a good analysis.
+% -----------------------------------------------------------------
+if length(obj(n).residuals)> 6
+    % Compute the difference between the top two cells of
+    % data and the optimized power fit
+    bot2=sum(obj(n).umedian(validData(end-1:end))...
+        -ppobj.coef.*obj(n).zmedian(validData(end-1:end)).^(ppobj.exponent));
+    % Compute the difference between the bottom two cells of
+    % data and the optimized power fit
+    top2=sum(obj(n).umedian(validData(1:2))...
+        -ppobj.coef.*obj(n).zmedian(validData(1:2)).^(ppobj.exponent));
+    % Compute the difference between the middle two cells of
+    % data and the optimized power fit
+    mid1=floor(length(~isnan(validData))./2);
+    mid2=sum(obj(n).umedian(validData(mid1:mid1+1))...
+        -ppobj.coef.*obj(n).zmedian(validData(mid1:mid1+1)).^(ppobj.exponent));
+    
+    % Default fit set to power/power
+    obj(n).topMethodAuto='Power';
+    obj(n).botMethodAuto='Power';
+    
+    % Evaluate difference in data and power fit at water surface
+    % using a linear fit through the top 4 median cells and
+    % save results.
+    linfit=regstats(obj(n).umedian(validData(1:4)),...
+        obj(n).zmedian(validData(1:4)),'linear',{'beta','r','rsquare'});
+    dsmfitr2=1-(sum(linfit.r.^2)./mean(abs(linfit.r)));
+    obj(n).topfitr2=dsmfitr2;
+    obj(n).topr2=linfit.rsquare;
+    
+    %% Evaluate overall fit
+    % If the optimized power fit does not have an r^2
+    % better than 0.8 or if the optimized exponent if
+    % 0.1667 falls within the 95% confidence interval of
+    % the optimized fit, there is insufficient justification to
+    % change the exponent from 0.1667.
+    if ppobj.rsqr<0.8 || (0.1667>obj(n).exponent95confint(1) && 0.1667<obj(n).exponent95confint(2))
+        % If the an optimized exponent cannot be justified,
+        % the linear fit is used to determine if a constant
+        % fit at the top is a better alternative than a
+        % power fit. If the power fit is the better
+        % alternative the exponent is set to the default
+        % 0.1667 and the data is refit.
+        if abs(obj(n).topfitr2)<0.8 || obj(n).topr2<0.9
+            %ppobj=clsFitData(normalized(n),'Power','Power','Manual',0.1667);
+            ppobj = extrapVMT(ppobj.u,ppobj.z,1:size(ppobj.u,1),'ConstantPower','default');
+            ppobj.topMethodAuto='Power';
+            ppobj.botMethodAuto='Power';
+        end % if top*
+    end % if 0.1667
+    
+    %% Evaluate fit of top and bottom portions of the profile
+    % Set save selected exponent and associated fit
+    % statistics
+    obj(n).exponentAuto=ppobj.exponent;
+    obj(n).fitrsqr=ppobj.rsqr;
+    
+    % Compute the difference at the water surface between a
+    % linear fit of the top 4 measured cells and the best
+    % selected power fit of the whole profile.
+    obj(n).topmaxdiff=ppobj.umedian(end)-(sum(linfit.beta));
+    
+    % Evaluate the difference at the bottom between power using
+    % the whole profile and power using only the bottom third.
+%     nsobj=extrapVMT(ppobj.u,ppobj.z,1:size(ppobj.u,1),'ConstantNoSlip','optimize');
+%     clsFitData(normalized(n),'Constant','No Slip','optimize');
+    obj(n).nsexponent=nsobj.exponent;
+    obj(n).botrsqr=nsobj.rsqr;
+    obj(n).botdiff=ppobj.u(round(ppobj.z,2)==0.1)-nsobj.u(round(nsobj.z,2)==0.1);
+    
+    % Begin automatic selection logic
+    % ===============================
+    
+    % A constant no slip fit condition is selected if:
+    %
+    % 1)The top of the power fit doesn't fit the data well.
+    % This is determined to be the situation when
+    % (a) the difference at the water surface between the
+    % linear fit and the power fit is greater than 10% and
+    % (b) the difference is either positive or the difference
+    % of the top measured cell differs from the best
+    % selected power fit by more than 5%.
+    % OR
+    % 2) The bottom of the power fit doesn't fit the data
+    % well. This is determined to be the situation when (a)
+    % the difference between and optimized no slip fit
+    % and the selected best power fit of the whole profile
+    % is greater than 10% and (b) the optimized on slip fit has
+    % and r^2 greater than 0.6.
+    % OR
+    % 3) Flow is bidirectional. The sign of the top of the
+    % profile is different from the sign of the bottom of
+    % the profile.
+    % OR
+    % 4) The profile is C-shaped. This is determined by
+    % (a) the sign of the top and bottom difference from
+    % the best selected power fit being different than the
+    % sign of the middle difference from the best selected
+    % power fit and (b) the combined difference of the top
+    % and bottom difference from the best selected power
+    % fit being greater than 10%.
+    if (abs(obj(n).topmaxdiff)>0.1) ...
+            && (obj(n).topmaxdiff>0 || abs(obj(n).umedian(validData(end))-ppobj.u(1))>0.05)...
+            || ((abs(obj(n).botdiff)>0.1)&& obj(n).botrsqr>0.6)...
+            || (sign(obj(n).umedian(validData(1)))~=sign(obj(n).umedian(validData(end)))...
+            || sign(bot2).*sign(top2)==sign(mid2) && abs(bot2+top2)>0.1)
+        
+        % Set the bototm to no slip
+        obj(n).botMethodAuto='No Slip';
+        % if the no slip fit with an optimized exponent
+        % does not have an r^2 better than 0.8 use the
+        % default 0.1667 for the no slip exponent
+        if nsobj.rsqr>0.8
+            obj(n).exponentAuto=nsobj.exponent;
+            obj(n).fitrsqr=nsobj.rsqr;
+        else
+            obj(n).exponentAuto=0.1667;
+            obj(n).fitrsqr=nan;
+        end % if
+        
+        % Use the no slip 95% confidence intervals if they
+        % are available.
+        if ~isempty(nsobj.exponent95confint) & ~isnan(nsobj.exponent95confint)
+            obj(n).exponent95confint(1)=nsobj.exponent95confint(1);
+            obj(n).exponent95confint(2)=nsobj.exponent95confint(2);
+        else
+            obj(n).exponent95confint(1)=nan;
+            obj(n).exponent95confint(2)=nan;
+        end % if
+        
+        % Set the top method to constant
+        obj(n).topMethodAuto='Constant';
+    else
+        
+        % Leave the fit set to power / power and set the
+        % best selected optimized exponent as the automatic
+        % fit exponent.
+        obj(n).exponentAuto=ppobj.exponent;
+    end % if constant / no slip
+else
+    
+    % If the data are insufficient for a valid analysis use
+    % the power / power fit with the default 0.1667
+    % exponent.
+    obj(n).topMethodAuto='Power';
+    obj(n).botMethodAuto='Power';
+    obj(n).exponentAuto=0.1667;
+    obj(n).nsexponent=0.1667;
+end % if data are sufficient
+
+% Update the fit using the automatically selected methods
+% and exponent.
+optSel = extrapVMT(obj.u,obj.z,1:size(obj.u,1),[obj(n).topMethodAuto obj(n).botMethodAuto],'manual',obj(n).exponentAuto);
+obj.umedian = optSel.umedian;
+obj.zmedian = optSel.zmedian;
+obj.unit25 = optSel.unit25;
+obj.unit75 = optSel.unit75;
+obj.z = optSel.z;
+obj.exponent = optSel.exponent;
+obj.exponent95confint = optSel.exponent95confint;
+obj.rsqr = optSel.rsqr;
+obj.k = optSel.k;
+obj.coef = optSel.coef;
+obj.residuals = optSel.residuals;
+obj.u = optSel.u;
+obj.validData = optSel.validData;
+
+    
+end % if type of fit

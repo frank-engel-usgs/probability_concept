@@ -1,4 +1,4 @@
-function [V,A,fig_contour_handle,fig_extrap_handle] =  find_yaxis(V,A,z)
+function [V,A,fig_contour_handle,fig_extrap_handle,fig_table_handle] =  find_yaxis(V,A,z)
 % Input variables
 horizontal_grid_node_spacing_orig = A(1).hgns;
 vertical_grid_node_spacing_orig = A(1).vgns;
@@ -94,15 +94,29 @@ U = U(:,sample_mask(1,:));
 
 
 % Compute all the extrap fits
-[extrapPP,~] = extrapVMT(udim,zdim,1:size(u,1),'PowerPower','default');
-[extrapCP,~] = extrapVMT(udim,zdim,1:size(u,1),'ConstantPower','default');
-[extrapCPopt,~] = extrapVMT(udim,zdim,1:size(u,1),'ConstantPower','optimize');
-[extrapCNS,~] = extrapVMT(udim,zdim,1:size(u,1),'ConstantNoSlip','default');
-[extrapCNSopt,~] = extrapVMT(udim,zdim,1:size(u,1),'ConstantNoSlip','optimize');
-[extrap3pNS,~] = extrapVMT(udim,zdim,1:size(u,1),'3-PointNoSlip','default');
-[extrap3pNSopt,~] = extrapVMT(udim,zdim,1:size(u,1),'3-PointNoSlip','optimize');
-[extrapPPopt,~] = extrapVMT(udim,zdim,1:size(u,1),'PowerPower','optimize');
-[extrapCNS,fig_extrap_handle] = extrapVMT(udim,zdim,1:size(u,1),'ConstantNoSlip','default');
+[extrapPP] = extrapVMT(udim,zdim,1:size(u,1),'PowerPower','default');
+[extrapCP] = extrapVMT(udim,zdim,1:size(u,1),'ConstantPower','default');
+[extrapCPopt] = extrapVMT(udim,zdim,1:size(u,1),'ConstantPower','optimize');
+[extrapCNS] = extrapVMT(udim,zdim,1:size(u,1),'ConstantNo Slip','default');
+[extrapCNSopt] = extrapVMT(udim,zdim,1:size(u,1),'ConstantNo Slip','optimize');
+[extrap3pNS] = extrapVMT(udim,zdim,1:size(u,1),'3-PointNoSlip','default');
+[extrap3pNSopt] = extrapVMT(udim,zdim,1:size(u,1),'3-PointNoSlip','optimize');
+[extrapPPopt] = extrapVMT(udim,zdim,1:size(u,1),'PowerPower','optimize');
+[extrapCNS] = extrapVMT(udim,zdim,1:size(u,1),'ConstantNo Slip','default');
+
+% Use DSM's QRev Logic to choose the best fit, then create an extrap figure
+% using the auto selected method
+[extrapAuto] = selectFit(extrapPPopt,extrapPP,extrapCNSopt);
+fig_extrap_handle = findobj(0,'name','Velocity Profile Extrapotation');
+if ~isempty(fig_extrap_handle) &&  ishandle(fig_extrap_handle)
+    figure(fig_extrap_handle); clf
+else
+    fig_extrap_handle = figure('name','Velocity Profile Extrapotation'); clf
+end
+plot(udim(:,:),zdim(:,:),'.','color', [0.8 0.8 0.8]); hold on
+
+
+
 
 % Find total mean velocity using trapz (from VMT method) for each profile
 % type. As this represents the y-axis, use H at this location for
@@ -198,24 +212,87 @@ k3PNSopt = (u3PNSopt./mean(U))/extrap3pNSopt.u(end);
 
 % Determine all of the percent differences based on the
 % reference mean
-referenceMean = uPP;
+% Velocity
+autoMethod = [extrapAuto.topMethodAuto extrapAuto.botMethodAuto];
+autoExp = extrapAuto.exponentAuto;
+switch autoMethod
+    case 'PowerPower'
+        if isequal(autoExp,0.1667)
+            referenceMean = uPP;
+            referenceMeanAlpha = kPP;
+            for k=1:length(extrapPP.validData)
+                plot(...
+                    [extrapPP.unit25(extrapPP.validData(k)) extrapPP.unit75(extrapPP.validData(k))],...
+                    [extrapPP.zmedian(k) extrapPP.zmedian(k)],...
+                    '-k','LineWidth',2)
+            end
+            plot(extrapPP.umedian,extrapPP.zmedian,'sk','MarkerFaceColor','k')
+            plot(extrapPP.u,extrapPP.z,'k-','linewidth',2)
+        else
+            referenceMean = uPPopt;
+            referenceMeanAlpha = kPPopt;
+            for k=1:length(extrapPPopt.validData)
+                plot(...
+                    [extrapPPopt.unit25(extrapPPopt.validData(k)) extrapPPopt.unit75(extrapPPopt.validData(k))],...
+                    [extrapPPopt.zmedian(k) extrapPPopt.zmedian(k)],...
+                    '-k','LineWidth',2)
+            end
+            plot(extrapPPopt.umedian,extrapPPopt.zmedian,'sk','MarkerFaceColor','k')
+            plot(extrapPPopt.u,extrapPPopt.z,'k-','linewidth',2)
+        end
+    case 'ConstantNo Slip'
+        if isequal(autoExp,0.1667)
+            referenceMean = uCNS;
+            referenceMeanAlpha = kCNS;
+            for k=1:length(extrapCNS.validData)
+                plot(...
+                    [extrapCNS.unit25(extrapCNS.validData(k)) extrapCNS.unit75(extrapCNS.validData(k))],...
+                    [extrapCNS.zmedian(k) extrapCNS.zmedian(k)],...
+                    '-k','LineWidth',2)
+            end
+            plot(extrapCNS.umedian,extrapCNS.zmedian,'sk','MarkerFaceColor','k')
+            plot(extrapCNS.u,extrapCNS.z,'k-','linewidth',2)
+        else
+            referenceMean = uCNSopt;
+            referenceMeanAlpha = kCNSopt;
+            for k=1:length(extrapCNSopt.validData)
+                plot(...
+                    [extrapCNSopt.unit25(extrapCNSopt.validData(k)) extrapCNSopt.unit75(extrapCNSopt.validData(k))],...
+                    [extrapCNSopt.zmedian(k) extrapCNSopt.zmedian(k)],...
+                    '-k','LineWidth',2)
+            end
+            plot(extrapCNSopt.umedian,extrapCNSopt.zmedian,'sk','MarkerFaceColor','k')
+            plot(extrapCNSopt.u,extrapCNSopt.z,'k-','linewidth',2)
+        end
+end
+title (...
+    {'Normalized Extrap'})
+xlabel('Velocity(z)/Avg Velocity')
+ylabel('Depth(z)/Vertical Beam Depth')
+
 uPPperdiff = ((uPP-referenceMean)./referenceMean).*100;
 uPPoptperdiff = ((uPPopt-referenceMean)./referenceMean).*100;
 uCNSperdiff = ((uCNS-referenceMean)./referenceMean).*100;
 uCNSoptperdiff = ((uCNSopt-referenceMean)./referenceMean).*100;
 u3PNSperdiff = ((u3PNS-referenceMean)./referenceMean).*100;
 u3PNSoptperdiff = ((u3PNSopt-referenceMean)./referenceMean).*100;
+kPPperdiff = ((kPP-referenceMeanAlpha)./referenceMeanAlpha).*100;
+kPPoptperdiff = ((kPPopt-referenceMeanAlpha)./referenceMeanAlpha).*100;
+kCNSperdiff = ((kCNS-referenceMeanAlpha)./referenceMeanAlpha).*100;
+kCNSoptperdiff = ((kCNSopt-referenceMeanAlpha)./referenceMeanAlpha).*100;
+k3PNSperdiff = ((k3PNS-referenceMeanAlpha)./referenceMeanAlpha).*100;
+k3PNSoptperdiff = ((k3PNSopt-referenceMeanAlpha)./referenceMeanAlpha).*100;
 
 % Create a uitable with values
 % See if Table figure exists already, if so clear the figure
 fig_table_handle = findobj(0,'name','Extrapolation Sensitivity Table');
 if ~isempty(fig_table_handle) &&  ishandle(fig_table_handle)
     figure(fig_table_handle); clf
-    fPos = get(fig_table_handle,'Position'); fPos(3:4) = [600 148];
+    fPos = get(fig_table_handle,'Position'); fPos(3:4) = [525 148];
     fig_table_handle.Position = fPos;
 else
     fig_table_handle = figure('name','Extrapolation Sensitivity Table'); clf
-    fPos = get(fig_table_handle,'Position'); fPos(3:4) = [600 148];
+    fPos = get(fig_table_handle,'Position'); fPos(3:4) = [525 148];
     fig_table_handle.Position = fPos;
 end
 uTable(1,1)={'Power'};
@@ -223,32 +300,57 @@ uTable(1,2)={'Power'};
 uTable(1,3)={'0.1667'};
 uTable(1,4)={num2str(uPPperdiff,'%6.2f')};
 uTable(1,5)={num2str(kPP,'%6.3f')};
+uTable(1,6)={num2str(kPPperdiff,'%6.2f')};
 uTable(2,1)={'Power'};
 uTable(2,2)={'Power'};
 uTable(2,3)={num2str(extrapPPopt.exponent,'%6.4f')};
 uTable(2,4)={num2str(uPPoptperdiff,'%6.2f')};
 uTable(2,5)={num2str(kPPopt,'%6.3f')};
+uTable(2,6)={num2str(kPPoptperdiff,'%6.2f')};
 uTable(3,1)={'Constant'};
 uTable(3,2)={'No Slip'};
 uTable(3,3)={'0.1667'};
 uTable(3,4)={num2str(uCNSperdiff,'%6.2f')};
 uTable(3,5)={num2str(kCNS,'%6.3f')};
+uTable(3,6)={num2str(kCNSperdiff,'%6.2f')};
 uTable(4,1)={'Constant'};
 uTable(4,2)={'No Slip'};
 uTable(4,3)={num2str(extrapCNSopt.exponent,'%6.4f')};
 uTable(4,4)={num2str(uCNSoptperdiff,'%6.2f')};
 uTable(4,5)={num2str(kCNSopt,'%6.3f')};
+uTable(4,6)={num2str(kCNSoptperdiff,'%6.2f')};
 uTable(5,1)={'3-Point'};
 uTable(5,2)={'No Slip'};
 uTable(5,3)={'0.1667'};
 uTable(5,4)={num2str(u3PNSperdiff,'%6.2f')};
 uTable(5,5)={num2str(k3PNS,'%6.3f')};
+uTable(5,6)={num2str(k3PNSperdiff,'%6.2f')};
 uTable(6,1)={'3-Point'};
 uTable(6,2)={'No Slip'};
 uTable(6,3)={num2str(extrap3pNSopt.exponent,'%6.4f')};
 uTable(6,4)={num2str(u3PNSoptperdiff,'%6.2f')};
 uTable(6,5)={num2str(k3PNSopt,'%6.3f')};
+uTable(6,6)={num2str(k3PNSoptperdiff,'%6.2f')};
+
+% for all table entries, check if selected method and label reference
+% if it is
+top = extrapAuto.topMethodAuto; 
+bottom = extrapAuto.botMethodAuto; 
+exp = extrapAuto.exponentAuto;
+for x = 1:6
+    if strcmpi(uTable{x,1},top) & strcmpi(uTable{x,2},bottom) & abs(str2num(uTable{x,3})-exp)<0.0001
+        uTable(x,1) = {['<html><b>',uTable{x,1},'</b></html>']};
+        uTable(x,2) = {['<html><b>',uTable{x,2},'</b></html>']};
+        uTable(x,3) = {['<html><b>',uTable{x,3},'</b></html>']};
+        uTable(x,4) = {'<html><b>Reference</b></html>'};
+        uTable(x,5) = {['<html><b>',uTable{x,5},'</b></html>']};
+
+        uTable(x,6) = {'<html><b>Reference</b></html>'};
+        
+    end
+end
+
 t = uitable(fig_table_handle);
 t.Data = uTable;
-t.ColumnName = {'Top Fit','Bottom Fit','Exponent','Velocity % Diff','Alpha'};
-t.Position = [8 8 416 133];
+t.ColumnName = {'Top Fit','Bottom Fit','Exponent','Velocity % Diff','Alpha','Alpha % Diff'};
+t.Position = [8 8 500 133];
