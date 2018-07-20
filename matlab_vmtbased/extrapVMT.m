@@ -213,5 +213,9 @@ if ~isnan(zc)
 end % if zc
 obj.validData = idxz;
 
+%% Compute the probability concept alternative velocity distribution
+% This fit is computed from the dimensionaless median values used in the
+% standard extrap approach
+[obj] = fitProbabilityConcept(obj);
 
 extrap = obj;

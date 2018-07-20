@@ -228,6 +228,8 @@ switch autoMethod
             end
             plot(extrapPP.umedian,extrapPP.zmedian,'sk','MarkerFaceColor','k')
             plot(extrapPP.u,extrapPP.z,'k-','linewidth',2)
+            plot(extrapPP.u_pc, extrapPP.z, '-', 'Color', [18 104 179]/255, 'LineWidth', 2)
+            plot(extrapPP.u_predict_int95,extrapPP.z,'--','Color', [18 104 179]/255, 'LineWidth', 1.5)
         else
             referenceMean = uPPopt;
             referenceMeanAlpha = kPPopt;
@@ -239,6 +241,8 @@ switch autoMethod
             end
             plot(extrapPPopt.umedian,extrapPPopt.zmedian,'sk','MarkerFaceColor','k')
             plot(extrapPPopt.u,extrapPPopt.z,'k-','linewidth',2)
+            plot(extrapPPopt.u_pc, extrapPPopt.z, '-', 'Color', [18 104 179]/255, 'LineWidth', 2)
+            plot(extrapPPopt.u_predict_int95,extrapPPopt.z,'--','Color', [18 104 179]/255, 'LineWidth', 1.5)
         end
     case 'ConstantNo Slip'
         if isequal(autoExp,0.1667)
@@ -252,6 +256,8 @@ switch autoMethod
             end
             plot(extrapCNS.umedian,extrapCNS.zmedian,'sk','MarkerFaceColor','k')
             plot(extrapCNS.u,extrapCNS.z,'k-','linewidth',2)
+            plot(extrapCNS.u_pc, extrapCNS.z, '-', 'Color', [18 104 179]/255, 'LineWidth', 2)
+            plot(extrapCNS.u_predict_int95,extrapCNS.z,'--','Color', [18 104 179]/255, 'LineWidth', 1.5)
         else
             referenceMean = uCNSopt;
             referenceMeanAlpha = kCNSopt;
@@ -263,8 +269,11 @@ switch autoMethod
             end
             plot(extrapCNSopt.umedian,extrapCNSopt.zmedian,'sk','MarkerFaceColor','k')
             plot(extrapCNSopt.u,extrapCNSopt.z,'k-','linewidth',2)
+            plot(extrapCNSopt.u_pc, extrapCNSopt.z, '-', 'Color', [18 104 179]/255, 'LineWidth', 2)
+            plot(extrapCNSopt.u_predict_int95,extrapCNSopt.z,'--','Color', [18 104 179]/255, 'LineWidth', 1.5)
         end
 end
+
 title (...
     {'Normalized Extrap'})
 xlabel('Velocity(z)/Avg Velocity')

@@ -1,4 +1,4 @@
-function [V,A,fig_contour_handle,fig_extrap_handle,fig_table_handle] =  find_yaxis(V,A,z)
+function [V,A,fig_contour_handle,fig_extrap_handle,fig_table_handle,fitX,fitY] =  find_yaxis(V,A,z)
 % Input variables
 horizontal_grid_node_spacing_orig = A(1).hgns;
 vertical_grid_node_spacing_orig = A(1).vgns;
@@ -217,7 +217,7 @@ autoMethod = [extrapAuto.topMethodAuto extrapAuto.botMethodAuto];
 autoExp = extrapAuto.exponentAuto;
 switch autoMethod
     case 'PowerPower'
-        if ~isequal(autoExp,0.1667)
+        if isequal(autoExp,0.1667)
             referenceMean = uPP;
             referenceMeanAlpha = kPP;
             for k=1:length(extrapPP.validData)
@@ -241,14 +241,37 @@ switch autoMethod
             plot(extrapPPopt.u,extrapPPopt.z,'k-','linewidth',2)
         end
     case 'ConstantNo Slip'
-        if ~isequal(autoExp,0.1667)
-            referenceMean = uCNSopt;
-            referenceMeanAlpha = kCNSopt;
+        if isequal(autoExp,0.1667)
+            referenceMean = uCNS;
+            referenceMeanAlpha = kCNS;
+            for k=1:length(extrapCNS.validData)
+                plot(...
+                    [extrapCNS.unit25(extrapCNS.validData(k)) extrapCNS.unit75(extrapCNS.validData(k))],...
+                    [extrapCNS.zmedian(k) extrapCNS.zmedian(k)],...
+                    '-k','LineWidth',2)
+            end
+            plot(extrapCNS.umedian,extrapCNS.zmedian,'sk','MarkerFaceColor','k')
+            plot(extrapCNS.u,extrapCNS.z,'k-','linewidth',2)
         else
             referenceMean = uCNSopt;
             referenceMeanAlpha = kCNSopt;
+            for k=1:length(extrapCNSopt.validData)
+                plot(...
+                    [extrapCNSopt.unit25(extrapCNSopt.validData(k)) extrapCNSopt.unit75(extrapCNSopt.validData(k))],...
+                    [extrapCNSopt.zmedian(k) extrapCNSopt.zmedian(k)],...
+                    '-k','LineWidth',2)
+            end
+            plot(extrapCNSopt.umedian,extrapCNSopt.zmedian,'sk','MarkerFaceColor','k')
+            plot(extrapCNSopt.u,extrapCNSopt.z,'k-','linewidth',2)
+            fitX = extrapCNSopt.umedian; fitY = extrapCNSopt.zmedian;
         end
 end
+
+% Add the probability concept profile
+hold on
+plot(obj.u_pc, obj.z, '-', 'Color', [18 104 179]/255, 'LineWidth', 2)
+plot(obj.u_predict_int95,obj.z,'--','Color', [18 104 179]/255, 'LineWidth', 1.5)
+
 title (...
     {'Normalized Extrap'})
 xlabel('Velocity(z)/Avg Velocity')
