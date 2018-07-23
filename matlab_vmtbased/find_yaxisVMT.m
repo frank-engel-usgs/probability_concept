@@ -1,4 +1,4 @@
-function [V,A,fig_contour_handle,fig_extrap_handle,fig_table_handle,fitX,fitY] =  find_yaxis(V,A,z)
+function [V,A,fig_contour_handle,fig_extrap_handle,fig_table_handle] =  find_yaxisVMT(V,A,z)
 % Input variables
 horizontal_grid_node_spacing_orig = A(1).hgns;
 vertical_grid_node_spacing_orig = A(1).vgns;
@@ -210,6 +210,14 @@ toU=toU(ind);
 u3PNSopt = abs(VMT_LayerAveMean(toZ,toU));
 k3PNSopt = (u3PNSopt./mean(U))/extrap3pNSopt.u(end);
 
+% Plot the probability concept fit with CI at 95%
+hold on
+plot(extrapPP.u_pc, extrapPP.z, '-', 'Color', [18 104 179]/255, 'LineWidth', 2)
+plot(extrapPP.u_predict_int95,extrapPP.z,'--','Color', [18 104 179]/255, 'LineWidth', 1.5)
+pc_h = extrapPP.h_predicted;
+pc_M = extrapPP.M;
+pc_phi = exp(pc_M)/(exp(pc_M)-1)-1/pc_M;
+
 % Determine all of the percent differences based on the
 % reference mean
 % Velocity
@@ -263,14 +271,8 @@ switch autoMethod
             end
             plot(extrapCNSopt.umedian,extrapCNSopt.zmedian,'sk','MarkerFaceColor','k')
             plot(extrapCNSopt.u,extrapCNSopt.z,'k-','linewidth',2)
-            fitX = extrapCNSopt.umedian; fitY = extrapCNSopt.zmedian;
         end
 end
-
-% Add the probability concept profile
-hold on
-plot(obj.u_pc, obj.z, '-', 'Color', [18 104 179]/255, 'LineWidth', 2)
-plot(obj.u_predict_int95,obj.z,'--','Color', [18 104 179]/255, 'LineWidth', 1.5)
 
 title (...
     {'Normalized Extrap'})
@@ -338,6 +340,20 @@ uTable(6,3)={num2str(extrap3pNSopt.exponent,'%6.4f')};
 uTable(6,4)={num2str(u3PNSoptperdiff,'%6.2f')};
 uTable(6,5)={num2str(k3PNSopt,'%6.3f')};
 uTable(6,6)={num2str(k3PNSoptperdiff,'%6.2f')};
+
+uTable(7,1:6)={''};
+
+% PC vars M, h, phi, sensitivity
+uTable(8,1:6)={...
+    '<html><b>Prob Concept</b></html>',...
+    '<html><b>M</b></html>',...
+    '<html><b>h</b></html>',...
+    '',...
+    '<html><b>phi</b></html>',...
+    '<html><b>phi % Diff</b></html>'};
+uTable(9,2)={num2str(pc_M,'%6.2f')};
+uTable(9,3)={num2str(pc_h,'%6.2f')};
+uTable(9,5)={num2str(pc_phi,'%6.2f')};
 
 % for all table entries, check if selected method and label reference
 % if it is
