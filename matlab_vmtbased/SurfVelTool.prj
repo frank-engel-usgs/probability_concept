@@ -1,0 +1,180 @@
+<deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
+  <configuration build-checksum="2479552339" file="D:\REPOS\probability_concept\matlab_vmtbased\SurfVelTool.prj" location="D:\REPOS\probability_concept\matlab_vmtbased" name="SurfVelTool" preferred-package-location="D:\REPOS\probability_concept\matlab_vmtbased\SurfVelTool\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.standalone" target-name="Application Compiler">
+    <param.appname>SurfVelTool</param.appname>
+    <param.icon />
+    <param.icons />
+    <param.version>1.0</param.version>
+    <param.authnamewatermark>Frank L. Engel</param.authnamewatermark>
+    <param.email>fengel@usgs.gov</param.email>
+    <param.company>US Geological Survey</param.company>
+    <param.summary>A tool to develop parameters used to convery surface velocities to mean channel velocities</param.summary>
+    <param.description>This tool loads input velocity profile data from either VMT outputs or QRev outputs, fits appropriate extrapolations to the data to compute alpha (sometimes called the k-index). It provides some measure of sensitivity of alpha to the extrapolation parameters. Additionally the SurfVelTool computes the alternative Probability Concept velocity distribution and reports the fitted parameters for that method. This method is often used to calibrate continous Doppler radar sensors to report mean channel velocity and discharge.</param.description>
+    <param.screenshot>${PROJECT_ROOT}\splash.png</param.screenshot>
+    <param.guid />
+    <param.installpath.string>\US Geological Survey\SurfVelTool\</param.installpath.string>
+    <param.installpath.combo>option.installpath.programfiles</param.installpath.combo>
+    <param.logo />
+    <param.install.notes />
+    <param.target.install.notes />
+    <param.intermediate>${PROJECT_ROOT}\SurfVelTool\for_testing</param.intermediate>
+    <param.files.only>${PROJECT_ROOT}\SurfVelTool\for_redistribution_files_only</param.files.only>
+    <param.output>${PROJECT_ROOT}\SurfVelTool\for_redistribution</param.output>
+    <param.enable.clean.build>false</param.enable.clean.build>
+    <param.user.defined.mcr.options />
+    <param.embed.ctf>true</param.embed.ctf>
+    <param.target.type>subtarget.standalone</param.target.type>
+    <param.support.packages />
+    <param.required.mcr.products>
+      <item>35000</item>
+      <item>35010</item>
+    </param.required.mcr.products>
+    <param.web.mcr>true</param.web.mcr>
+    <param.package.mcr>false</param.package.mcr>
+    <param.no.mcr>false</param.no.mcr>
+    <param.web.mcr.name>SurfVelTool_web</param.web.mcr.name>
+    <param.package.mcr.name>MyAppInstaller_mcr</param.package.mcr.name>
+    <param.no.mcr.name>MyAppInstaller_app</param.no.mcr.name>
+    <param.windows.command.prompt>false</param.windows.command.prompt>
+    <param.create.log>false</param.create.log>
+    <param.log.file />
+    <unset>
+      <param.icon />
+      <param.icons />
+      <param.version />
+      <param.guid />
+      <param.installpath.string />
+      <param.installpath.combo />
+      <param.logo />
+      <param.target.install.notes />
+      <param.intermediate />
+      <param.files.only />
+      <param.output />
+      <param.enable.clean.build />
+      <param.user.defined.mcr.options />
+      <param.embed.ctf />
+      <param.target.type />
+      <param.support.packages />
+      <param.web.mcr />
+      <param.package.mcr />
+      <param.no.mcr />
+      <param.package.mcr.name />
+      <param.no.mcr.name />
+      <param.create.log />
+      <param.log.file />
+    </unset>
+    <fileset.main>
+      <file>${PROJECT_ROOT}\SurfVelTool.m</file>
+    </fileset.main>
+    <fileset.resources />
+    <fileset.package>
+      <file>${PROJECT_ROOT}\20150507_phi_QRev.mat</file>
+      <file>${PROJECT_ROOT}\20151229_s114023r_e114223r.mat</file>
+    </fileset.package>
+    <fileset.depfun>
+      <file>${PROJECT_ROOT}\extrapVMT.m</file>
+      <file>${PROJECT_ROOT}\find_yaxisQRev.m</file>
+      <file>${PROJECT_ROOT}\find_yaxisVMT.m</file>
+      <file>${PROJECT_ROOT}\fitProbabilityConcept.m</file>
+      <file>${PROJECT_ROOT}\selectFit.m</file>
+      <file>${PROJECT_ROOT}\SurfVelTool.fig</file>
+      <file>${PROJECT_ROOT}\VMTStylePrint.m</file>
+      <file>D:\REPOS\QRev\3rd_Party_Functions\ell2utm.m</file>
+      <file>D:\REPOS\QRev\3rd_Party_Functions\GoogleEarth\deg2rad.m</file>
+      <file>D:\REPOS\QRev\3rd_Party_Functions\refell.m</file>
+      <file>D:\REPOS\QRev\3rd_Party_Functions\xml2struct.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsBoatData.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsBoatStructure.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsComputeExtrap.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsDateTime.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsDepthData.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsDepthStructure.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsEdgeData.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsEdges.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsExtrapData.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsExtrapQSensitivity.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsFitData.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsGPSData.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsHeadingData.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsInstrumentData.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsMatSonTek.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsMeasurement.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsMmtTRDI.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsMovingBedTests.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsNormData.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsPd0TRDI.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsPreMeasurement.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsQAData.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsQComp.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsSelectFit.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsSensorData.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsSensors.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsSensorStructure.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsTransectData.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsTransformationMatrix.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsUncertainty.m</file>
+      <file>D:\REPOS\QRev\QRev_Classes\clsWaterData.m</file>
+      <file>D:\REPOS\QRev\QRev_Functions\azdeg2rad.m</file>
+      <file>D:\REPOS\QRev\QRev_Functions\getUserPref.m</file>
+      <file>D:\REPOS\QRev\QRev_Functions\nancumsum.m</file>
+      <file>D:\REPOS\QRev\QRev_Functions\nandiff.m</file>
+      <file>D:\REPOS\QRev\QRev_Functions\rad2azdeg.m</file>
+      <file>D:\REPOS\QRev\QRev_Functions\updateStatus.m</file>
+      <file>D:\REPOS\VMT\utils\ari2geodeg.m</file>
+      <file>D:\REPOS\VMT\utils\deg2utm.m</file>
+      <file>D:\REPOS\VMT\utils\disableMenuBar.m</file>
+      <file>D:\REPOS\VMT\utils\editFigureDialog.m</file>
+      <file>D:\REPOS\VMT\utils\geo2arideg.m</file>
+      <file>D:\REPOS\VMT\utils\keep.m</file>
+      <file>D:\REPOS\VMT\utils\moving_average.m</file>
+      <file>D:\REPOS\VMT\utils\nanmoving_average.m</file>
+      <file>D:\REPOS\VMT\utils\nanmoving_average2.m</file>
+      <file>D:\REPOS\VMT\utils\nansum.m</file>
+      <file>D:\REPOS\VMT\utils\rad2deg.m</file>
+      <file>D:\REPOS\VMT\utils\smooth.m</file>
+      <file>D:\REPOS\VMT\utils\smooth2a.m</file>
+      <file>D:\REPOS\VMT\utils\ticks_format.m</file>
+      <file>D:\REPOS\VMT\utils\vrotation.m</file>
+      <file>D:\REPOS\VMT\VMT_CompMeanXS.m</file>
+      <file>D:\REPOS\VMT\VMT_CompMeanXS_PriSec.m</file>
+      <file>D:\REPOS\VMT\VMT_CompMeanXS_UVW.m</file>
+      <file>D:\REPOS\VMT\VMT_FilterBS.m</file>
+      <file>D:\REPOS\VMT\VMT_GridData2MeanXS.m</file>
+      <file>D:\REPOS\VMT\VMT_LayerAveMean.m</file>
+      <file>D:\REPOS\VMT\VMT_MapEns2MeanXS.m</file>
+      <file>D:\REPOS\VMT\VMT_PlotXSCont.m</file>
+      <file>D:\REPOS\VMT\VMT_PreProcess.m</file>
+      <file>D:\REPOS\VMT\VMT_ProcessTransects.m</file>
+      <file>D:\REPOS\VMT\VMT_RepBadGPS.m</file>
+      <file>D:\REPOS\VMT\VMT_Rozovskii.m</file>
+      <file>D:\REPOS\VMT\VMT_SelectFiles.m</file>
+      <file>D:\REPOS\VMT\VMT_SmoothVar.m</file>
+      <file>D:\REPOS\VMT\VMT_unitQcont.m</file>
+      <file>D:\REPOS\VMT\VMT_Vorticity.m</file>
+    </fileset.depfun>
+    <build-deliverables>
+      <file location="${PROJECT_ROOT}\SurfVelTool\for_testing" name="SurfVelTool.exe" optional="false">D:\REPOS\probability_concept\matlab_vmtbased\SurfVelTool\for_testing\SurfVelTool.exe</file>
+      <file location="${PROJECT_ROOT}\SurfVelTool\for_testing" name="readme.txt" optional="true">D:\REPOS\probability_concept\matlab_vmtbased\SurfVelTool\for_testing\readme.txt</file>
+      <file location="${PROJECT_ROOT}\SurfVelTool\for_testing" name="splash.png" optional="false">D:\REPOS\probability_concept\matlab_vmtbased\SurfVelTool\for_testing\splash.png</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>C:\Program Files\MATLAB\R2015b</root>
+      <toolboxes />
+    </matlab>
+    <platform>
+      <unix>false</unix>
+      <mac>false</mac>
+      <windows>true</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>false</linux>
+      <solaris>false</solaris>
+      <osver>6.2</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>win64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>

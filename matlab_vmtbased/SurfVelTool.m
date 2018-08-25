@@ -22,9 +22,11 @@ function varargout = SurfVelTool(varargin)
 
 % Edit the above text to modify the response to help SurfVelTool
 
-% Last Modified by GUIDE v2.5 24-Aug-2018 20:07:10
+% Last Modified by GUIDE v2.5 24-Aug-2018 20:40:24
 
 % Begin initialization code - DO NOT EDIT
+% Adress 2015b java bug #1293244
+javax.swing.UIManager.setLookAndFeel('com.sun.java.swing.plaf.windows.WindowsLookAndFeel')
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
@@ -78,6 +80,7 @@ function ProcessVMTOutputFile_Callback(hObject, eventdata, handles)
 % hObject    handle to ProcessVMTOutputFile (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+close all
 find_yaxisVMT();
 
 % --- Executes on button press in ProcessQRevOutputFile.
@@ -85,4 +88,16 @@ function ProcessQRevOutputFile_Callback(hObject, eventdata, handles)
 % hObject    handle to ProcessQRevOutputFile (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+close all
 find_yaxisQRev();
+
+
+% --- Executes when user attempts to close figure1.
+function figure1_CloseRequestFcn(hObject, eventdata, handles)
+% hObject    handle to figure1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: delete(hObject) closes the figure
+close all hidden
+delete(hObject);
