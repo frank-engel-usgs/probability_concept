@@ -1,16 +1,26 @@
 function [fig_extrap_handle,fig_table_handle] =  find_yaxisQRev()
 
 
-% Get a list of files to work with
-dname = uigetdir(pwd,'Select directory containing QRev files (will search recursively):');
-[~,~,QRevFiles] = dirr([dname filesep '*QRev*'],'name');
-[~, ~, ext] = cellfun(@fileparts, QRevFiles, 'UniformOutput', 0);
-idx = find(cellfun(@(x)strcmp(x,'.mat'),ext));
-QRevFiles = QRevFiles(idx);
-numFiles = numel(QRevFiles);
+% % Get a list of files to work with
+% dname = uigetdir(pwd,'Select directory containing QRev files (will search recursively):');
+% [~,~,QRevFiles] = dirr([dname filesep '*QRev*'],'name');
+% [~, ~, ext] = cellfun(@fileparts, QRevFiles, 'UniformOutput', 0);
+% idx = find(cellfun(@(x)strcmp(x,'.mat'),ext));
+% QRevFiles = QRevFiles(idx);
+% numFiles = numel(QRevFiles);
 
-hwait = waitbar(0,['Processing 1 of ' num2str(numFiles) ' measurements'] );
-wstep = floor(numFiles/(numFiles)); wcount = 0;
+%Prompt to load a QRev file
+[filename,pathname] = ...
+    uigetfile({'*.mat','MAT-files (*.mat)'}, ...
+    'Select QRev MAT File', ...
+    pwd, 'MultiSelect','off');
+
+if ischar(filename) % Single MAT file loaded
+    QRevFiles = {filename};
+end
+
+hwait = waitbar(0,['Processing 1 of ' num2str(1) ' measurements'] );
+wstep = floor(1/(1)); wcount = 0;
 
 
 % Load each QRev result, create obj, process
@@ -182,7 +192,11 @@ for zi = 1%:numFiles
         hold on
         plot(extrapPP.u_pc, extrapPP.z, '-', 'Color', [18 104 179]/255, 'LineWidth', 2)
         plot(extrapPP.u_predict_int95,extrapPP.z,'--','Color', [18 104 179]/255, 'LineWidth', 1.5)
-        
+        % Plot the probability concept fit with CI at 95%
+        pc_h = extrapPP.h_predicted;
+        pc_M = extrapPP.M;
+        pc_phi = exp(pc_M)/(exp(pc_M)-1)-1/pc_M;
+
         % Determine all of the percent differences based on the
         % reference mean
         % Velocity
@@ -261,11 +275,11 @@ for zi = 1%:numFiles
         fig_table_handle = findobj(0,'name','Extrapolation Sensitivity Table');
         if ~isempty(fig_table_handle) &&  ishandle(fig_table_handle)
             figure(fig_table_handle); clf
-            fPos = get(fig_table_handle,'Position'); fPos(3:4) = [525 148];
+            fPos = get(fig_table_handle,'Position'); fPos(3:4) = [525 200];
             fig_table_handle.Position = fPos;
         else
             fig_table_handle = figure('name','Extrapolation Sensitivity Table'); clf
-            fPos = get(fig_table_handle,'Position'); fPos(3:4) = [525 148];
+            fPos = get(fig_table_handle,'Position'); fPos(3:4) = [525 200];
             fig_table_handle.Position = fPos;
         end
         uTable(1,1)={'Power'};
@@ -305,13 +319,27 @@ for zi = 1%:numFiles
         uTable(6,5)={num2str(k3PNSopt,'%6.3f')};
         uTable(6,6)={num2str(k3PNSoptperdiff,'%6.2f')};
         
+        uTable(7,1:6)={''};
+        
+        % PC vars M, h, phi, sensitivity
+        uTable(8,1:6)={...
+            '<html><b>Prob Concept</b></html>',...
+            '<html><b>M</b></html>',...
+            '<html><b>h</b></html>',...
+            '',...
+            '<html><b>phi</b></html>',...
+            '<html><b>phi % Diff</b></html>'};
+        uTable(9,2)={num2str(pc_M,'%6.2f')};
+        uTable(9,3)={num2str(pc_h,'%6.2f')};
+        uTable(9,5)={num2str(pc_phi,'%6.2f')};
+        
         % for all table entries, check if selected method and label reference
         % if it is
         top = extrapAuto.topMethodAuto;
         bottom = extrapAuto.botMethodAuto;
-        exp = extrapAuto.exponentAuto;
+        exp1 = extrapAuto.exponentAuto;
         for x = 1:6
-            if strcmpi(uTable{x,1},top) & strcmpi(uTable{x,2},bottom) & abs(str2num(uTable{x,3})-exp)<0.0001
+            if strcmpi(uTable{x,1},top) & strcmpi(uTable{x,2},bottom) & abs(str2num(uTable{x,3})-exp1)<0.0001
                 uTable(x,1) = {['<html><b>',uTable{x,1},'</b></html>']};
                 uTable(x,2) = {['<html><b>',uTable{x,2},'</b></html>']};
                 uTable(x,3) = {['<html><b>',uTable{x,3},'</b></html>']};
@@ -326,15 +354,16 @@ for zi = 1%:numFiles
         t = uitable(fig_table_handle);
         t.Data = uTable;
         t.ColumnName = {'Top Fit','Bottom Fit','Exponent','Velocity % Diff','Alpha','Alpha % Diff'};
-        t.Position = [8 8 500 133];
+        t.Position = [8 8 500 190];
         
         wcount = wcount + 1;
-        if ~mod(wcount, wstep) || wcount == numFiles
-            waitbar(wcount/numFiles,hwait,['Processing ' num2str(wcount) ' of ' num2str(numFiles) ' measurements'])
+        if ~mod(wcount, wstep) || wcount == 1
+            waitbar(wcount/1,hwait,['Processing ' num2str(wcount) ' of ' num2str(1) ' measurements'])
         end
     catch
         OK = vertcat(OK,{QRevFiles{zi}, datestr(datetime('now'),'yyyymmddHHMMSS')});
     end
+    delete(hwait)
 end
 
 function plotScale (normData,h)

@@ -1,4 +1,37 @@
 function [V,A,fig_contour_handle,fig_extrap_handle,fig_table_handle] =  find_yaxisVMT(V,A,z)
+
+if nargin<3
+    %Prompt to load a VMT file
+    [filename,pathname] = ...
+        uigetfile({'*.mat','MAT-files (*.mat)'}, ...
+        'Select VMT MAT File', ...
+        pwd, 'MultiSelect','off');
+    
+    if ischar(filename) % Single MAT file loaded
+        temp_filename = filename;
+    elseif iscell(filename)
+        temp_filename = filename{1};
+    else % Not a valid file
+        errordlg('The selected file is not a valid ADCP data MAT file.', ...
+            'Invalid File...')
+    end
+    
+    % Load the data:
+    % --------------
+    vars = load(fullfile(pathname,temp_filename)); %Use first file to get the HGNS and VGNS
+    
+    % Make sure the selected file is a valid file:
+    % --------------------------------------------
+    varnames = fieldnames(vars);
+    if isequal(sort(varnames),{'A' 'Map' 'V' 'z'}')
+        mat_path = pathname;
+        mat_file = temp_filename;
+        z = vars.z;
+        A = vars.A;
+        V = vars.V;
+    end
+end
+
 % Input variables
 horizontal_grid_node_spacing_orig = A(1).hgns;
 vertical_grid_node_spacing_orig = A(1).vgns;
@@ -297,11 +330,11 @@ k3PNSoptperdiff = ((k3PNSopt-referenceMeanAlpha)./referenceMeanAlpha).*100;
 fig_table_handle = findobj(0,'name','Extrapolation Sensitivity Table');
 if ~isempty(fig_table_handle) &&  ishandle(fig_table_handle)
     figure(fig_table_handle); clf
-    fPos = get(fig_table_handle,'Position'); fPos(3:4) = [525 148];
+    fPos = get(fig_table_handle,'Position'); fPos(3:4) = [525 200];
     fig_table_handle.Position = fPos;
 else
     fig_table_handle = figure('name','Extrapolation Sensitivity Table'); clf
-    fPos = get(fig_table_handle,'Position'); fPos(3:4) = [525 148];
+    fPos = get(fig_table_handle,'Position'); fPos(3:4) = [525 200];
     fig_table_handle.Position = fPos;
 end
 uTable(1,1)={'Power'};
@@ -359,9 +392,9 @@ uTable(9,5)={num2str(pc_phi,'%6.2f')};
 % if it is
 top = extrapAuto.topMethodAuto; 
 bottom = extrapAuto.botMethodAuto; 
-exp = extrapAuto.exponentAuto;
+exp1 = extrapAuto.exponentAuto;
 for x = 1:6
-    if strcmpi(uTable{x,1},top) & strcmpi(uTable{x,2},bottom) & abs(str2num(uTable{x,3})-exp)<0.0001
+    if strcmpi(uTable{x,1},top) & strcmpi(uTable{x,2},bottom) & abs(str2num(uTable{x,3})-exp1)<0.0001
         uTable(x,1) = {['<html><b>',uTable{x,1},'</b></html>']};
         uTable(x,2) = {['<html><b>',uTable{x,2},'</b></html>']};
         uTable(x,3) = {['<html><b>',uTable{x,3},'</b></html>']};
@@ -376,4 +409,4 @@ end
 t = uitable(fig_table_handle);
 t.Data = uTable;
 t.ColumnName = {'Top Fit','Bottom Fit','Exponent','Velocity % Diff','Alpha','Alpha % Diff'};
-t.Position = [8 8 500 133];
+t.Position = [8 8 500 190];
