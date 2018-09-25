@@ -16,7 +16,7 @@ function [fig_extrap_handle,fig_table_handle] =  find_yaxisQRev()
     pwd, 'MultiSelect','off');
 
 if ischar(filename) % Single MAT file loaded
-    QRevFiles = {filename};
+    QRevFiles = {fullfile(pathname,filename)};
 end
 
 hwait = waitbar(0,['Processing 1 of ' num2str(1) ' measurements'] );

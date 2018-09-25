@@ -12,9 +12,6 @@ opts.Upper = [1.0 8.0 Inf Inf]; % Depth M h umax
 
 % Check that all data are valid
 % fit>iFit X, Y and WEIGHTS cannot have NaN values.
-is_ok = ~isnan(obj.zmedian) & ~isnan(obj.umedian);
-obj.zmedian = obj.zmedian(is_ok);
-obj.umedian = obj.umedian(is_ok);
 
 
 ok_ = [1 1 1];

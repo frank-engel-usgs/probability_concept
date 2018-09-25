@@ -1,10 +1,4 @@
-function [V,A,fig_contour_handle,fig_extrap_handle,fig_table_handle] =  find_yaxisVMT(V,A,z)
-
-if nargin<3
-    %Prompt to load a VMT file
-    
-    e
-
+function [V,A,fig_contour_handle,fig_extrap_handle,fig_table_handle] =  find_yaxis(V,A,z)
 % Input variables
 horizontal_grid_node_spacing_orig = A(1).hgns;
 vertical_grid_node_spacing_orig = A(1).vgns;
@@ -216,14 +210,6 @@ toU=toU(ind);
 u3PNSopt = abs(VMT_LayerAveMean(toZ,toU));
 k3PNSopt = (u3PNSopt./mean(U))/extrap3pNSopt.u(end);
 
-% Plot the probability concept fit with CI at 95%
-hold on
-plot(extrapPP.u_pc, extrapPP.z, '-', 'Color', [18 104 179]/255, 'LineWidth', 2)
-plot(extrapPP.u_predict_int95,extrapPP.z,'--','Color', [18 104 179]/255, 'LineWidth', 1.5)
-pc_h = extrapPP.h_predicted;
-pc_M = extrapPP.M;
-pc_phi = exp(pc_M)/(exp(pc_M)-1)-1/pc_M;
-
 % Determine all of the percent differences based on the
 % reference mean
 % Velocity
@@ -279,7 +265,6 @@ switch autoMethod
             plot(extrapCNSopt.u,extrapCNSopt.z,'k-','linewidth',2)
         end
 end
-
 title (...
     {'Normalized Extrap'})
 xlabel('Velocity(z)/Avg Velocity')
@@ -347,27 +332,13 @@ uTable(6,4)={num2str(u3PNSoptperdiff,'%6.2f')};
 uTable(6,5)={num2str(k3PNSopt,'%6.3f')};
 uTable(6,6)={num2str(k3PNSoptperdiff,'%6.2f')};
 
-uTable(7,1:6)={''};
-
-% PC vars M, h, phi, sensitivity
-uTable(8,1:6)={...
-    '<html><b>Prob Concept</b></html>',...
-    '<html><b>M</b></html>',...
-    '<html><b>h</b></html>',...
-    '',...
-    '<html><b>phi</b></html>',...
-    '<html><b>phi % Diff</b></html>'};
-uTable(9,2)={num2str(pc_M,'%6.2f')};
-uTable(9,3)={num2str(pc_h,'%6.2f')};
-uTable(9,5)={num2str(pc_phi,'%6.2f')};
-
 % for all table entries, check if selected method and label reference
 % if it is
 top = extrapAuto.topMethodAuto; 
 bottom = extrapAuto.botMethodAuto; 
-exp1 = extrapAuto.exponentAuto;
+exp = extrapAuto.exponentAuto;
 for x = 1:6
-    if strcmpi(uTable{x,1},top) & strcmpi(uTable{x,2},bottom) & abs(str2num(uTable{x,3})-exp1)<0.0001
+    if strcmpi(uTable{x,1},top) & strcmpi(uTable{x,2},bottom) & abs(str2num(uTable{x,3})-exp)<0.0001
         uTable(x,1) = {['<html><b>',uTable{x,1},'</b></html>']};
         uTable(x,2) = {['<html><b>',uTable{x,2},'</b></html>']};
         uTable(x,3) = {['<html><b>',uTable{x,3},'</b></html>']};
