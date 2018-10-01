@@ -54,6 +54,17 @@ function SurfVelTool_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to SurfVelTool (see VARARGIN)
 
+% If running from source, add the QRev Classes to path, including
+% subfolders. This hook only works for user FENGEL, and should be removed
+% from final deployed software.
+if ~isdeployed
+    userProfile = getenv('USERPROFILE');
+    [~,user,~] = fileparts(userProfile);
+    if strmatch(user,'fengel')
+        addpath(genpath('D:\REPOS\QRev'))
+    end
+end
+
 % Choose default command line output for SurfVelTool
 handles.output = hObject;
 
