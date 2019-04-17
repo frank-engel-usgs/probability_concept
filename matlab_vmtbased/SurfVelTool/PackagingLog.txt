@@ -3,19 +3,268 @@ Compiler version: 6.1 (R2015b)
 
 Dependency analysis by REQUIREMENTS.
 
+Restoring Default path
+
+		MATLABPATH
+
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\addons_product
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\addons_zip
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\apps
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\audiovideo
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\cefclient
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\configtools
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\connector\connector
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\external\engines\engine_api
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\supportpackagemanagement
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\imagesci
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\addons
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\addons\cef
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\addons\fallbackmanager
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\demos
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\graph2d
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\graph3d
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\graphics
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\graphics\obsolete
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\plottools
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\scribe
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\scribe\obsolete
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\specgraph
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\uitools
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\uitools\obsolete
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\hardware\stubs
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\images
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\optimfun
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\codetools
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\datafun
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\datamanager
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\datastoreio
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\datatypes
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\depfun
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\elfun
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\elmat
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\funfun
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\general
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\graphfun
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\guide
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\helptools
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\icons
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\iofun
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\lang
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\mapreduceio
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\matfun
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\ops
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\polyfun
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\randfun
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\sparfun
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\specfun
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\strfun
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\testframework
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\testframework\obsolete
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\timefun
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\verctrl
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\winfun
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\winfun\NET
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\networklib
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\external\interfaces\python
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\external\engines\python
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\spf\matlabhost
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\spf\matlabservices
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\system
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\timeseries
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\hds
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\toolboxmanagement
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\toolbox_packaging
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\toolstrip
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\webcam
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\external\interfaces\webservices\restful
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\external\interfaces
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\external\interfaces\webservices
+	C:\Program Files\MATLAB\R2015b\toolbox\matlab\external\interfaces\webservices\wsdl
+	C:\Program Files\MATLAB\R2015b\toolbox\local
+	C:\Program Files\MATLAB\R2015b\toolbox\simulink\simulink_data_dictionary\sldd
+	C:\Program Files\MATLAB\R2015b\toolbox\rtw\targets\connectivity
+	C:\Program Files\MATLAB\R2015b\toolbox\rtw\rtw
+	C:\Program Files\MATLAB\R2015b\toolbox\coder\codedescriptor_core
+	C:\Program Files\MATLAB\R2015b\toolbox\coder\coder
+	C:\Program Files\MATLAB\R2015b\toolbox\coder\connectivity
+	C:\Program Files\MATLAB\R2015b\toolbox\coder\emlcodermex
+	C:\Program Files\MATLAB\R2015b\toolbox\coder\foundation
+	C:\Program Files\MATLAB\R2015b\toolbox\coder\foundation\build
+	C:\Program Files\MATLAB\R2015b\toolbox\coder\foundation\build\tools\registry
+	C:\Program Files\MATLAB\R2015b\toolbox\coder\foundation\tfl
+	C:\Program Files\MATLAB\R2015b\toolbox\coder\foundation\tfl\AUTOSAR\AUTOSAR4p0\IFX
+	C:\Program Files\MATLAB\R2015b\toolbox\coder\foundation\tfl\AUTOSAR\AUTOSAR4p0\IFL
+	C:\Program Files\MATLAB\R2015b\toolbox\coder\foundation\tfl\gui
+	C:\Program Files\MATLAB\R2015b\toolbox\coder\foundation\templates
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\simtargets
+	C:\Program Files\MATLAB\R2015b\toolbox\coder\profile
+	C:\Program Files\MATLAB\R2015b\toolbox\coder\rtiostream
+	C:\Program Files\MATLAB\R2015b\toolbox\coder\trace
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\comparisons
+	C:\Program Files\MATLAB\R2015b\toolbox\compiler_sdk\java
+	C:\Program Files\MATLAB\R2015b\toolbox\compiler
+	C:\Program Files\MATLAB\R2015b\toolbox\compiler\compilerdemos
+	C:\Program Files\MATLAB\R2015b\toolbox\compiler\java
+	C:\Program Files\MATLAB\R2015b\toolbox\compiler_sdk
+	C:\Program Files\MATLAB\R2015b\toolbox\curvefit\curvefit
+	C:\Program Files\MATLAB\R2015b\toolbox\curvefit\splines
+	C:\Program Files\MATLAB\R2015b\toolbox\curvefit\cftoolgui
+	C:\Program Files\MATLAB\R2015b\toolbox\curvefit\sftoolgui
+	C:\Program Files\MATLAB\R2015b\toolbox\curvefit\curvefitdemos
+	C:\Program Files\MATLAB\R2015b\toolbox\dotnetbuilder\dotnetbuilder
+	C:\Program Files\MATLAB\R2015b\toolbox\dotnetbuilder\dotnetbuilderdemos
+	C:\Program Files\MATLAB\R2015b\toolbox\eml\eml
+	C:\Program Files\MATLAB\R2015b\toolbox\fixedpoint\fixedpoint
+	C:\Program Files\MATLAB\R2015b\toolbox\geoweb\geoweb
+	C:\Program Files\MATLAB\R2015b\toolbox\hdlcoder\hdllib\ml_lib
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\hadoopserializer
+	C:\Program Files\MATLAB\R2015b\toolbox\images\colorspaces
+	C:\Program Files\MATLAB\R2015b\toolbox\images\images
+	C:\Program Files\MATLAB\R2015b\toolbox\images\imdata
+	C:\Program Files\MATLAB\R2015b\toolbox\images\imuitools
+	C:\Program Files\MATLAB\R2015b\toolbox\images\iptformats
+	C:\Program Files\MATLAB\R2015b\toolbox\images\iptutils
+	C:\Program Files\MATLAB\R2015b\toolbox\images\imdemos
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\instrument
+	C:\Program Files\MATLAB\R2015b\toolbox\javabuilder\javabuilder
+	C:\Program Files\MATLAB\R2015b\toolbox\javabuilder\javabuilderdemos
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\m3i
+	C:\Program Files\MATLAB\R2015b\toolbox\map\map
+	C:\Program Files\MATLAB\R2015b\toolbox\map\mapgeodesy
+	C:\Program Files\MATLAB\R2015b\toolbox\map\mapdisp
+	C:\Program Files\MATLAB\R2015b\toolbox\map\mapformats
+	C:\Program Files\MATLAB\R2015b\toolbox\map\mapproj
+	C:\Program Files\MATLAB\R2015b\toolbox\map\mapdata
+	C:\Program Files\MATLAB\R2015b\toolbox\map\mapdata\sdts
+	C:\Program Files\MATLAB\R2015b\toolbox\map\mapdemos
+	C:\Program Files\MATLAB\R2015b\toolbox\matlabxl\matlabxl
+	C:\Program Files\MATLAB\R2015b\toolbox\matlabxl\matlabxldemos
+	C:\Program Files\MATLAB\R2015b\toolbox\compiler\mlhadoop
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\cxxfe_mi\cxxfe_mi
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\advisor
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\asynciolib
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\cgir_fe
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\cgxe\cgxe
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\coder\coder
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\configset
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\controllib\general
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\controllib\graphics
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\controllib\graphics\utils
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\controllib\graphics\plotoptions
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\curvefitlib
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\dastudio
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\hwconnectinstaller
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\hwconnectinstaller\common
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\imageslib
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\mapgeodesy
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\maputils
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\mlreportgen\dom
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\mlreportgen\dom\dom
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\mlreportgen\dom\dom\help
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\mlreportgen\ppt
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\mlreportgen\ppt\ppt
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\mlreportgen\ppt\ppt\help
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\multimedia
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\networklib
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\optimlib
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\rptgen
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\siglib
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\sl_coverage_configset
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\sl_async_streaming
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\spcuilib
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\statslib
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\statslib\sensitivity
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\system\coder
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\testmeaslib\general
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\testmeaslib\graphics
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\simulink
+	C:\Program Files\MATLAB\R2015b\toolbox\shared\simulation_data_repository
+	C:\Program Files\MATLAB\R2015b\toolbox\stats\stats
+	C:\Program Files\MATLAB\R2015b\toolbox\stats\classreg
+	C:\Program Files\MATLAB\R2015b\toolbox\stats\clustering
+	C:\Program Files\MATLAB\R2015b\toolbox\stats\statsdemos
+	C:\Program Files\MATLAB\R2015b\toolbox\stats\mlearnapp
+	D:\Documents\MATLAB
+adding path items from D:\Documents\MATLAB\startup
+Velocity Mapping Toolbox
+Added cpt to path
+Added doc to path
+Added tools to path
+Added utils to path
+QRev
+[Warning: Name is nonexistent or not a directory: D:\REPOS\Qrev\QRev_Classes] 
+[> In path (line 109)
+  In addpath (line 86)
+  In startup (line 44)
+  In matlabrc (line 227)] 
+Added QRev_Classes to path
+[Warning: Name is nonexistent or not a directory: D:\REPOS\Qrev\QRev_Functions] 
+[> In path (line 109)
+  In addpath (line 86)
+  In startup (line 44)
+  In matlabrc (line 227)] 
+Added QRev_Functions to path
+[Warning: Name is nonexistent or not a directory: D:\REPOS\Qrev\QRev_GUI] 
+[> In path (line 109)
+  In addpath (line 86)
+  In startup (line 44)
+  In matlabrc (line 227)] 
+Added QRev_GUI to path
+[Warning: Name is nonexistent or not a directory: D:\REPOS\Qrev\QRev_Help_Files] 
+[> In path (line 109)
+  In addpath (line 86)
+  In startup (line 44)
+  In matlabrc (line 227)] 
+Added QRev_Help_Files to path
+[Warning: Name is nonexistent or not a directory: D:\REPOS\Qrev\QBatch] 
+[> In path (line 109)
+  In addpath (line 86)
+  In startup (line 44)
+  In matlabrc (line 227)] 
+Added QBatch to path
+[Warning: Name is nonexistent or not a directory:
+D:\REPOS\Qrev\3rd_Party_Functions] 
+[> In path (line 109)
+  In addpath (line 86)
+  In startup (line 44)
+  In matlabrc (line 227)] 
+Added 3rd_Party_Functions to path
+Camera Calibration Toolbox
+m2html Help Doc Generator
+Added D:\Documents\MATLAB\mexcdf\mexnc to path
+Added D:\Documents\MATLAB\mexcdf\snctools to path
+Added D:\Documents\MATLAB\mexcdf\netcdfAll-4.3.jar to path
+Wave toolboxes and other tools from Marinna
+Added cmg_common to path
+Added wave_tbx to path
+Added wave_tbx\RDI to path
+Added wave_tbx\AddOns to path
+Added wave_tbx\Sontek to path
+Added wave_tbx\Datawell to path
+Added wave_tbx\RDI\demo to path
+Added NortekSignature to path
+Added INWORK to path
+Added SmartParos to path
+Added Lomb to path
+EPIC wave viewers from Marinna
+Added  to path
+Added viewers to path
++-----------------------------------------------------------------------+
+|                       Matlab Startup Complete                         |
++-----------------------------------------------------------------------+
 [Warning: Adding path "D:\REPOS\probability_concept\matlab_vmtbased" to Compiler
 path instance.] 
 [] 
 Parsing file "D:\REPOS\probability_concept\matlab_vmtbased\SurfVelTool.m"
 	(Referenced from: "Compiler Command Line").
 Deleting 1 temporary MEX authorization files.
-Removing: 'C:\Users\fengel\AppData\Local\Temp\1\mathworks_tmp_00e982581_3736.auth'.
+Removing: 'C:\Users\fengel\AppData\Local\Temp\2\mathworks_tmp_02a745655_10868.auth'.
 Generating file "D:\REPOS\probability_concept\matlab_vmtbased\SurfVelTool\for_testing\readme.txt".
 Packaging...
-Adding custom icon C:\Program Files\MATLAB\R2015b\toolbox\compiler\Resources\default_icon.ico to D:\REPOS\probability_concept\matlab_vmtbased\SurfVelTool\for_testing\SurfVelTool.exe.
+Adding custom icon D:\REPOS\probability_concept\matlab_vmtbased\SurfVelTool_resources\icon.ico to D:\REPOS\probability_concept\matlab_vmtbased\SurfVelTool\for_testing\SurfVelTool.exe.
 Attempting to embed the CTF archive into the application D:\REPOS\probability_concept\matlab_vmtbased\SurfVelTool\for_testing\SurfVelTool.exe.
 Finished embedding CTF archive. Deleting the external CTF archive.
 Creating the bundle...
 Web based installer created at D:\REPOS\probability_concept\matlab_vmtbased\SurfVelTool\for_redistribution\SurfVelTool_web.exe.
 Packaging complete.
-Elapsed packaging time was: 1 minutes and 23 seconds.
+Elapsed packaging time was: 59 seconds.

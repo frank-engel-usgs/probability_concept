@@ -1,8 +1,7 @@
 # Application Specific #
 ###################
-/stabilized
-/SurfVelTool
-/SurfVelTool_resources
+/matlab_vmtbased/SurfVelTool
+/matlab_vmtbased/SurfVelTool_resources
 
 # Matlab Specific #
 ###################
